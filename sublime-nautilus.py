@@ -21,7 +21,7 @@ NEWWINDOW = False
 
 class SublimeExtension(GObject.GObject, Nautilus.MenuProvider):
 
-    def launch_vscode(self, menu, files):
+    def launch_sublime(self, menu, files):
         safepaths = ''
         args = ''
 
@@ -46,7 +46,7 @@ class SublimeExtension(GObject.GObject, Nautilus.MenuProvider):
             label='Open in ' + SUBLIMENAME,
             tip='Opens the selected files with Sublime'
         )
-        item.connect('activate', self.launch_vscode, files)
+        item.connect('activate', self.launch_sublime, files)
 
         return [item]
 
@@ -57,6 +57,6 @@ class SublimeExtension(GObject.GObject, Nautilus.MenuProvider):
             label='Open in ' + SUBLIMENAME,
             tip='Opens the current directory in Sublime'
         )
-        item.connect('activate', self.launch_vscode, [file_])
+        item.connect('activate', self.launch_sublime, [file_])
 
         return [item]

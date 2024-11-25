@@ -15,13 +15,9 @@ ZED = 'zed'
 # what name do you want to see in the context menu?
 ZEDNAME = 'Zed'
 
-# always create new window?
-NEWWINDOW = False
+class ZedExtension(GObject.GObject, Nautilus.MenuProvider):
 
-
-class VSCodeExtension(GObject.GObject, Nautilus.MenuProvider):
-
-    def launch_vscode(self, menu, files):
+    def launch_zed(self, menu, files):
         safepaths = ''
         args = ''
 
@@ -29,34 +25,26 @@ class VSCodeExtension(GObject.GObject, Nautilus.MenuProvider):
             filepath = file.get_location().get_path()
             safepaths += '"' + filepath + '" '
 
-            # If one of the files we are trying to open is a folder
-            # create a new instance of vscode
-            if os.path.isdir(filepath) and os.path.exists(filepath):
-                args = '--new-window '
-
-        if NEWWINDOW:
-            args = '--new-window '
-
         call(ZED + ' ' + args + safepaths + '&', shell=True)
 
     def get_file_items(self, *args):
         files = args[-1]
         item = Nautilus.MenuItem(
-            name='SublimeOpen',
+            name='ZedOpen',
             label='Open in ' + ZEDNAME,
             tip='Opens the selected files with Zed'
         )
-        item.connect('activate', self.launch_vscode, files)
+        item.connect('activate', self.launch_zed, files)
 
         return [item]
 
     def get_background_items(self, *args):
         file_ = args[-1]
         item = Nautilus.MenuItem(
-            name='SublimeOpenBackground',
+            name='ZedOpenBackground',
             label='Open in ' + ZEDNAME,
             tip='Opens the current directory in Zed'
         )
-        item.connect('activate', self.launch_vscode, [file_])
+        item.connect('activate', self.launch_zed, [file_])
 
         return [item]
